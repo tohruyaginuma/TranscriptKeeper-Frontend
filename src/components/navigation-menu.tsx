@@ -7,16 +7,28 @@ import {
 	NavigationMenuList,
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import type { User } from "firebase/auth";
 
-export function NavigationMenu() {
+type NavigationMenuProps = {
+	user: User | null;
+};
+
+export function NavigationMenu(props: NavigationMenuProps) {
+	const { user } = props;
+
 	return (
 		<NavigationMenuPrimitive>
 			<NavigationMenuList>
-				<NavigationMenuItem>
-					<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-						<Link to="/notes">Notes</Link>
-					</NavigationMenuLink>
-				</NavigationMenuItem>
+				{user && (
+					<NavigationMenuItem>
+						<NavigationMenuLink
+							asChild
+							className={navigationMenuTriggerStyle()}
+						>
+							<Link to="/notes">Notes</Link>
+						</NavigationMenuLink>
+					</NavigationMenuItem>
+				)}
 			</NavigationMenuList>
 		</NavigationMenuPrimitive>
 	);

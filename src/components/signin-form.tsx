@@ -2,52 +2,34 @@ import { GalleryVerticalEnd } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { auth, provider } from "@/lib/firebase";
-import { signInWithPopup, signOut as signOutAuth } from "firebase/auth";
-import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { API_ROOT } from "@/config/constants";
+import { signInWithPopup } from "firebase/auth";
+import { API_URI } from "@/config/constants";
 import { useNavigate } from "react-router";
-import { Link } from "react-router";
+import { apiClient } from "@/lib/api";
 
 export function SigninForm({
 	className,
 	...props
 }: React.ComponentProps<"div">) {
-	const getIDToken = async () => {
-		const idToken = await auth.currentUser?.getIdToken();
-		if (!idToken) {
-			throw new Error("No ID token found");
-		}
-		return idToken;
-	};
+	const navigate = useNavigate();
 
 	const signInBackend = async () => {
-		const idToken = await getIDToken();
-		console.log("idToken", idToken);
 		try {
-			const response = await fetch(`${API_ROOT}/v1/auth`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${idToken}`,
-				},
-			});
-			const data = await response.json();
-			console.log("data", data);
+			const data = await apiClient(`${API_URI.AUTH_LOGIN}`, "POST");
+			return data;
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
 	const signIn = async () => {
-		console.log("signIn");
-
 		try {
 			await signInWithPopup(auth, provider);
-			const resultFromBackend = await signInBackend();
-			console.log("resultFromBackend", resultFromBackend);
+			await signInBackend();
+
+			navigate("/notes");
 		} catch (error) {
 			console.log(error);
 		}
@@ -84,17 +66,9 @@ export function SigninForm({
 							</svg>
 							Continue with Google
 						</Button>
-
-						<Button>
-							<Link to="/signout">Sign Out</Link>
-						</Button>
 					</Field>
 				</FieldGroup>
 			</form>
-			<FieldDescription className="px-6 text-center">
-				By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-				and <a href="#">Privacy Policy</a>.
-			</FieldDescription>
 		</div>
 	);
 }

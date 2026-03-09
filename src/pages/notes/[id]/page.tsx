@@ -1,68 +1,63 @@
 import BaseLayout from "@/components/base-layout";
 import TranscriptRow from "@/components/transcript-row";
-
-const dummyData = [
-	{
-		id: 1,
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-	},
-	{
-		id: 2,
-		text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-	},
-	{
-		id: 3,
-		text: "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.			",
-	},
-	{
-		id: 4,
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-	},
-	{
-		id: 5,
-		text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-	},
-	{
-		id: 6,
-		text: "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-	},
-	{
-		id: 7,
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-	},
-	{
-		id: 8,
-		text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-	},
-	{
-		id: 9,
-		text: "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-	},
-	{
-		id: 10,
-		text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-	},
-	{
-		id: 11,
-		text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-	},
-	{
-		id: 12,
-		text: "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-	},
-];
+import { API_URI } from "@/config/constants";
+import { apiClient } from "@/lib/api";
+import { useCallback, useEffect } from "react";
+import { useParams } from "react-router";
+import { useState } from "react";
+import type { Transcript } from "@/types/transcript";
+import { makeStringToArray } from "@/lib/utils";
+import Heading from "@/components/heading";
+import type { Note } from "@/types/note";
 
 const NoteDetailPage = () => {
+	const { id } = useParams();
+	const [note, setNote] = useState<Note | null>(null);
+	const [transcripts, setTranscripts] = useState<Transcript[]>([]);
+
+	const fetchNote = useCallback(async () => {
+		try {
+			const data = await apiClient<Note>(`${API_URI.NOTES}/${id}`, "GET");
+			setNote({
+				id: data.id,
+				title: data.title,
+				updated_at: data.updated_at,
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	}, [id]);
+
+	const fetchTranscripts = useCallback(async () => {
+		try {
+			const data = await apiClient<Transcript>(
+				`${API_URI.NOTE_TRANSCRIPTS(Number(id))}`,
+				"GET",
+			);
+			const transcripts = makeStringToArray(data.text, ".");
+			setTranscripts(transcripts);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [id]);
+
+	useEffect(() => {
+		fetchTranscripts();
+		fetchNote();
+	}, [fetchTranscripts, fetchNote]);
+
 	return (
 		<BaseLayout>
-			<h1>What is Lorem Ipsum?</h1>
-			{dummyData.map((item) => (
-				<TranscriptRow
-					key={item.id}
-					text={item.text}
-					hasBackground={item.id % 2 === 0}
-				/>
-			))}
+			<Heading level={1}>{note?.title}</Heading>
+			<div className="mt-4">
+				{ transcripts.map((item) => (
+					<TranscriptRow
+						key={item.id}
+						text={item.text}
+						hasBackground={item.id % 2 === 0}
+					/>
+				))}
+			</div>
 		</BaseLayout>
 	);
 };

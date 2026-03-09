@@ -8,3 +8,8 @@ export const FIREBASE_CONFIG = {
 	measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID ?? "",
 };
 export const API_ROOT = import.meta.env.VITE_API_ROOT ?? "";
+export const API_URI = {
+	AUTH_LOGIN: `${API_ROOT}/v1/auth`,
+	NOTES: `${API_ROOT}/v1/notes`,
+	NOTE_TRANSCRIPTS: (id: number) => `${API_ROOT}/v1/notes/${id}/transcripts`,
+};
