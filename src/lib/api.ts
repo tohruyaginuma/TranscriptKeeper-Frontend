@@ -11,6 +11,7 @@ const getIDToken = async () => {
 export const apiClient = async <T>(url: string, method: string = "GET") => {
 	try {
 		const idToken = await getIDToken();
+		console.log("idToken", idToken);
 		const response = await fetch(url, {
 			method: method,
 			headers: {
