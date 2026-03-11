@@ -18,7 +18,7 @@ export function SigninForm({
 	const signInBackend = async () => {
 		try {
 			const data = await apiClient(`${API_URI.AUTH_LOGIN}`, "POST");
-			return data;
+			console.log("data", data);
 		} catch (error) {
 			console.log(error);
 		}
