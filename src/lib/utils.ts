@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { Transcript } from "@/types/transcript";
+import { DOWNLOAD_URL } from "@/config/constants";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -24,4 +25,8 @@ export const makeStringToArray = (text: string, key: string) => {
 	}
 
 	return result;
+};
+
+export const openDownloadUrl = () => {
+	window.open(DOWNLOAD_URL, "_blank");
 };

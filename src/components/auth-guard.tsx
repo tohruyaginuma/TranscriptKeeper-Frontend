@@ -2,8 +2,8 @@ import type { PropsWithChildren } from "react";
 import type { AuthContextType } from "./auth-context";
 import { useContext } from "react";
 import { AuthContext } from "@/components/auth-context";
-import { Spinner } from "@/components/ui/spinner";
 import { Navigate } from "react-router";
+import Loading from "./loading";
 
 type AuthGuardProps = PropsWithChildren<object>;
 
@@ -12,7 +12,7 @@ const AuthGuard = (props: AuthGuardProps) => {
 	const { user, isLoading } = useContext<AuthContextType>(AuthContext);
 
 	if (isLoading) {
-		return <Spinner />;
+		return <Loading />;
 	}
 
 	if (user === null) {

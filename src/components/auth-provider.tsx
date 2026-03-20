@@ -2,7 +2,7 @@ import { auth } from "@/lib/firebase";
 import { type User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useMemo, useState } from "react";
 import type { PropsWithChildren } from "react";
-import { Spinner } from "@/components/ui/spinner";
+import Loading from "@/components/loading";
 import { AuthContext, type AuthContextType } from "@/components/auth-context";
 
 type AuthProviderProps = PropsWithChildren<object>;
@@ -31,7 +31,7 @@ const AuthProvider = (props: AuthProviderProps) => {
 
 	return (
 		<AuthContext.Provider value={value}>
-			{isLoading ? <Spinner /> : children}
+			{isLoading ? <Loading /> : children}
 		</AuthContext.Provider>
 	);
 };

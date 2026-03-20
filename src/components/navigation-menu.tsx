@@ -25,7 +25,12 @@ export function NavigationMenu(props: NavigationMenuProps) {
 							asChild
 							className={navigationMenuTriggerStyle()}
 						>
-							<Link to="/notes">Notes</Link>
+							<Link
+								to="/notes"
+								className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+							>
+								Notes
+							</Link>
 						</NavigationMenuLink>
 					</NavigationMenuItem>
 				)}

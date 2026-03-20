@@ -32,25 +32,33 @@ const Header = () => {
 	}, [location.pathname]);
 
 	return (
-		<div className="sticky top-0 w-full bg-background border-b px-4 py-3">
-			<div className="flex justify-between items-center m-auto max-w-7xl">
+		<header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg">
+			<div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
 				<Logo />
-				<NavigationMenu user={user} />
-				<div>
+
+				<nav className="hidden md:flex items-center gap-8">
+					<NavigationMenu user={user} />
+				</nav>
+
+				<div className="flex items-center gap-3">
+					{/* <Button variant="ghost" size="sm">
+						Sign In
+					</Button>
+					<Button size="sm">Sign Up</Button> */}
 					{user !== null ? (
 						<Button variant="default" onClick={signOut}>
 							Sign Out
 						</Button>
 					) : (
 						!isHideSignIn && (
-							<Button variant="outline" onClick={signIn}>
+							<Button variant="ghost" size="sm" onClick={signIn}>
 								Sign In
 							</Button>
 						)
 					)}
 				</div>
 			</div>
-		</div>
+		</header>
 	);
 };
 

@@ -13,3 +13,5 @@ export const API_URI = {
 	NOTES: `${API_ROOT}/v1/notes`,
 	NOTE_TRANSCRIPTS: (id: number) => `${API_ROOT}/v1/notes/${id}/transcripts`,
 };
+export const DOWNLOAD_URL =
+	"https://github.com/tohruyaginuma/TranscriptKeeper-Desktop/releases";
