@@ -2,18 +2,27 @@ import type { PropsWithChildren } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 
 type LayoutProps = PropsWithChildren<{
-	withHeader?: boolean;
-	withFooter?: boolean;
+	IsNoHeader?: boolean;
+	IsNoFooter?: boolean;
+	className?: string;
 }>;
 
-const BaseLayout = ({ children }: LayoutProps) => {
+const BaseLayout = ({
+	children,
+	IsNoHeader = false,
+	IsNoFooter = false,
+	className,
+}: LayoutProps) => {
 	return (
 		<main className="flex flex-col min-h-screen bg-background">
-			<Header />
-			<div className="pt-16 flex-1">{children}</div>
-			<Footer />
+			{!IsNoHeader && <Header />}
+			<div className={cn("flex-1", IsNoHeader ? "pt-0" : "pt-16", className)}>
+				{children}
+			</div>
+			{!IsNoFooter && <Footer />}
 			<Toaster />
 		</main>
 	);
