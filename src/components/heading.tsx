@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from "react";
 import { useMemo } from "react";
-import { cn } from "@/lib/utils";
 
 type HeadingProps = PropsWithChildren<{
 	level: 1 | 2 | 3;

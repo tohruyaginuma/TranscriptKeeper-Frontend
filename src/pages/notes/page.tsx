@@ -175,9 +175,9 @@ const NotesPage = () => {
 												<div className="flex -space-x-2">
 													{mockNotes[0].participants
 														.slice(0, 3)
-														.map((participant, i) => (
+														.map((participant) => (
 															<div
-																key={i}
+																key={participant}
 																className="w-7 h-7 rounded-full bg-secondary border-2 border-card flex items-center justify-center text-xs font-medium text-foreground"
 															>
 																{participant.charAt(0)}
