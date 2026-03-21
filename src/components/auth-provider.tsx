@@ -31,7 +31,7 @@ const AuthProvider = (props: AuthProviderProps) => {
 
 	return (
 		<AuthContext.Provider value={value}>
-			{isLoading ? <Loading /> : children}
+			{isLoading ? <Loading isFullScreen={true} /> : children}
 		</AuthContext.Provider>
 	);
 };

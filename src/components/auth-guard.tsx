@@ -12,7 +12,7 @@ const AuthGuard = (props: AuthGuardProps) => {
 	const { user, isLoading } = useContext<AuthContextType>(AuthContext);
 
 	if (isLoading) {
-		return <Loading />;
+		return <Loading isFullScreen={true} />;
 	}
 
 	if (user === null) {
