@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "react";
 import { useMemo } from "react";
 
 type HeadingProps = PropsWithChildren<{
-	level: 1 | 2 | 3;
+	level: "hero" | 1 | 2 | 3;
 }>;
 
 const Heading = (props: HeadingProps) => {
@@ -10,9 +10,15 @@ const Heading = (props: HeadingProps) => {
 
 	const As = useMemo(() => {
 		switch (level) {
-			case 1:
+			case "hero":
 				return (
 					<h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 text-balance">
+						{children}
+					</h1>
+				);
+			case 1:
+				return (
+					<h1 className="text-2xl md:text-3xl font-bold text-foreground">
 						{children}
 					</h1>
 				);

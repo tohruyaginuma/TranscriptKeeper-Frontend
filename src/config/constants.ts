@@ -15,3 +15,6 @@ export const API_URI = {
 };
 export const DOWNLOAD_URL =
 	"https://github.com/tohruyaginuma/TranscriptKeeper-Desktop/releases";
+export const HTTP_STATUS_CODE = {
+	NO_CONTENT: 204,
+};

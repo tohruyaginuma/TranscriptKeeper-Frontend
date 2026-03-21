@@ -4,8 +4,9 @@ import {
 	FileText,
 	Calendar,
 	Clock,
-	MoreHorizontal,
+	Pencil,
 	Download,
+	Trash,
 } from "lucide-react";
 import BaseLayout from "@/components/base-layout";
 import { useState, useCallback, useEffect } from "react";
@@ -14,66 +15,17 @@ import { API_URI } from "@/config/constants";
 import type { Note } from "@/types/note";
 import { openDownloadUrl } from "@/lib/utils";
 import Loading from "@/components/loading";
-
-const mockNotes = [
-	{
-		id: "1",
-		title: "Product Team Weekly Standup",
-		date: "2026-03-20",
-		time: "10:00 AM",
-		duration: "45 min",
-		participants: ["John D.", "Sarah M.", "Mike L."],
-		preview:
-			"Discussed Q2 roadmap priorities and feature releases. Action items include finalizing the design specs...",
-		platform: "Zoom",
-	},
-	{
-		id: "2",
-		title: "Interview - Senior Frontend Developer",
-		date: "2026-03-19",
-		time: "2:30 PM",
-		duration: "1h 15min",
-		participants: ["HR Team", "Candidate"],
-		preview:
-			"Technical interview covering React, TypeScript, and system design. Strong candidate with...",
-		platform: "Google Meet",
-	},
-	{
-		id: "3",
-		title: "Client Onboarding Call - Acme Corp",
-		date: "2026-03-18",
-		time: "11:00 AM",
-		duration: "30 min",
-		participants: ["Client Success", "Acme Team"],
-		preview:
-			"Walked through platform features and integration options. Client interested in enterprise plan...",
-		platform: "Microsoft Teams",
-	},
-	{
-		id: "4",
-		title: "Engineering Sprint Planning",
-		date: "2026-03-17",
-		time: "9:00 AM",
-		duration: "1h 30min",
-		participants: ["Dev Team"],
-		preview:
-			"Sprint 23 planning session. Prioritized bug fixes and new authentication features...",
-		platform: "Zoom",
-	},
-	{
-		id: "5",
-		title: "Design Review - Dashboard Redesign",
-		date: "2026-03-15",
-		time: "3:00 PM",
-		duration: "50 min",
-		participants: ["Design Team", "Product"],
-		preview:
-			"Reviewed new dashboard mockups. Feedback on color scheme and navigation structure...",
-		platform: "Figma",
-	},
-];
+import dayjs from "dayjs";
+import useAlertDeleteNote from "@/stores/alert-delete-note";
+import AlertDialogDestructive from "@/components/alert-dialog-destructive";
+import useDialogUpdateNote from "@/stores/dialog-update-note";
+import DialogEditNote from "@/components/dialog-edit-note";
+import { toast } from "sonner";
 
 const NotesPage = () => {
+	const { openAlertDeleteNote, closeAlertDeleteNote } = useAlertDeleteNote();
+	const { openDialogUpdateNote } = useDialogUpdateNote();
+
 	const [notes, setNotes] = useState<Note[]>([]);
 	const [loading, setLoading] = useState(false);
 
@@ -92,6 +44,22 @@ const NotesPage = () => {
 			setLoading(false);
 		}
 	}, []);
+
+	const deleteNote = useCallback(
+		async (id: number) => {
+			try {
+				await apiClient<void>(`${API_URI.NOTES}/${id}`, "DELETE");
+				toast("Note has been deleted.");
+				closeAlertDeleteNote();
+			} catch (error) {
+				console.error(error);
+				toast.error("Failed to delete note.");
+			} finally {
+				fetchNotes();
+			}
+		},
+		[closeAlertDeleteNote, fetchNotes],
+	);
 
 	useEffect(() => {
 		fetchNotes();
@@ -147,54 +115,32 @@ const NotesPage = () => {
 									<div className="flex items-start justify-between gap-4">
 										<div className="flex-1 min-w-0">
 											<div className="flex items-center gap-3 mb-2">
-												<span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-													{mockNotes[0].platform}
-												</span>
 												<div className="flex items-center gap-1.5 text-sm text-muted-foreground">
 													<Calendar className="w-4 h-4" />
-													{mockNotes[0].date}
+													{dayjs(note.updated_at).format("DD MMM YYYY")}
 												</div>
 												<div className="flex items-center gap-1.5 text-sm text-muted-foreground">
 													<Clock className="w-4 h-4" />
-													{mockNotes[0].time}
+													{dayjs(note.updated_at).format("HH:mm")}
 												</div>
-												<span className="text-sm text-muted-foreground">
-													{mockNotes[0].duration}
-												</span>
 											</div>
 
 											<h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors mb-2 truncate">
 												{note.title}
 											</h3>
-
-											<p className="text-muted-foreground text-sm line-clamp-2 mb-3">
-												{mockNotes[0].preview}
-											</p>
-
-											<div className="flex items-center gap-2">
-												<div className="flex -space-x-2">
-													{mockNotes[0].participants
-														.slice(0, 3)
-														.map((participant) => (
-															<div
-																key={participant}
-																className="w-7 h-7 rounded-full bg-secondary border-2 border-card flex items-center justify-center text-xs font-medium text-foreground"
-															>
-																{participant.charAt(0)}
-															</div>
-														))}
-													{mockNotes[0].participants.length > 3 && (
-														<div className="w-7 h-7 rounded-full bg-primary/20 border-2 border-card flex items-center justify-center text-xs font-medium text-primary">
-															+{mockNotes[0].participants.length - 3}
-														</div>
-													)}
-												</div>
-												<span className="text-sm text-muted-foreground">
-													{mockNotes[0].participants.join(", ")}
-												</span>
-											</div>
 										</div>
-
+										<Button
+											variant="destructive"
+											size="icon"
+											className="opacity-0 group-hover:opacity-100 transition-opacity"
+											onClick={(e) => {
+												e.preventDefault();
+												e.stopPropagation();
+												openAlertDeleteNote(note.id);
+											}}
+										>
+											<Trash className="w-5 h-5" />
+										</Button>
 										<Button
 											variant="ghost"
 											size="icon"
@@ -202,9 +148,11 @@ const NotesPage = () => {
 											onClick={(e) => {
 												e.preventDefault();
 												e.stopPropagation();
+
+												openDialogUpdateNote(note.id, note.title);
 											}}
 										>
-											<MoreHorizontal className="w-5 h-5" />
+											<Pencil className="w-5 h-5" />
 										</Button>
 									</div>
 								</div>
@@ -213,6 +161,12 @@ const NotesPage = () => {
 					</div>
 				)}
 			</div>
+			<AlertDialogDestructive
+				title="Delete note?"
+				description="This will permanently delete this note."
+				onConfirm={deleteNote}
+			/>
+			<DialogEditNote callback={fetchNotes} />
 		</BaseLayout>
 	);
 };

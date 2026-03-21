@@ -10,6 +10,10 @@ export function cn(...inputs: ClassValue[]) {
 export const makeStringToArray = (text: string, key: string) => {
 	const result: Transcript[] = [];
 
+	if (!text) {
+		return result;
+	}
+
 	for (const line of text.split(key)) {
 		const index = result.length + 1;
 		const trimmedText = `${line.trim()}`;
