@@ -3,7 +3,7 @@ import TranscriptRow from "@/components/transcript-row";
 import { API_URI } from "@/config/constants";
 import { apiClient } from "@/lib/api";
 import { useState, useCallback, useEffect } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import type { Transcript } from "@/types/transcript";
 import { makeStringToArray } from "@/lib/utils";
@@ -24,6 +24,7 @@ const NoteDetailPage = () => {
 	const { openDialogUpdateNote } = useDialogUpdateNote();
 
 	const { id } = useParams();
+	const navigate = useNavigate();
 
 	const [note, setNote] = useState<Note | null>(null);
 	const [transcripts, setTranscripts] = useState<Transcript[]>([]);
@@ -67,16 +68,16 @@ const NoteDetailPage = () => {
 		async (id: number) => {
 			try {
 				await apiClient<void>(`${API_URI.NOTES}/${id}`, "DELETE");
-				toast("Note has been deleted.");
+
 				closeAlertDeleteNote();
+				toast("Note has been deleted.");
+				navigate("/notes");
 			} catch (error) {
 				console.error(error);
 				toast.error("Failed to delete note.");
-			} finally {
-				fetchNote();
 			}
 		},
-		[closeAlertDeleteNote, fetchNote],
+		[closeAlertDeleteNote, navigate],
 	);
 
 	useEffect(() => {

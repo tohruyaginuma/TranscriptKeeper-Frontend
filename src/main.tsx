@@ -9,11 +9,13 @@ import SignInPage from "@/pages/signin/page";
 import SignOutPage from "@/pages/signout/page";
 import AuthProvider from "@/components/auth-provider";
 import AuthGuard from "@/components/auth-guard";
+import { Toaster } from "@/components/ui/sonner";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<BrowserRouter>
 			<AuthProvider>
+				<Toaster />
 				<Routes>
 					<Route
 						path="/notes"
