@@ -10,7 +10,7 @@ const TranscriptRow = (props: TranscriptRowProps) => {
 
 	return (
 		<div className={cn("w-full px-4 py-2", hasBackground && "bg-secondary/50")}>
-			<span className="text-muted-foreground">{text}</span>
+			<span className="text-white">{text}</span>
 		</div>
 	);
 };
