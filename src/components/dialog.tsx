@@ -16,7 +16,7 @@ type DialogProps = PropsWithChildren<{
 	description: string;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onConfirm: () => void;
+	onConfirm: () => void | Promise<void>;
 }>;
 
 const Dialog = (props: DialogProps) => {

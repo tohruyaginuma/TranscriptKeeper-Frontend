@@ -8,12 +8,12 @@ import Dialog from "@/components/dialog";
 import useDialogUpdateNote from "@/stores/dialog-update-note";
 import { toast } from "sonner";
 import { API_URI } from "@/config/constants";
-import { apiClient } from "@/lib/api";
+import { apiClient, getApiErrorMessage } from "@/lib/api";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 type DialogProps = PropsWithChildren<{
-	callback: () => void;
+	callback: () => void | Promise<void>;
 }>;
 
 const DialogEditNote = (props: DialogProps) => {
@@ -29,12 +29,10 @@ const DialogEditNote = (props: DialogProps) => {
 				title: inputTitle,
 			});
 			toast("Note has been updated.");
-		} catch (error) {
-			console.error(error);
-			toast.error("Failed to update note.");
-		} finally {
 			closeDialogUpdateNote();
-			callback?.();
+			await callback?.();
+		} catch (error) {
+			toast.error(getApiErrorMessage(error));
 		}
 	}, [closeDialogUpdateNote, callback, id, inputTitle]);
 
