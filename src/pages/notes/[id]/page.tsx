@@ -6,11 +6,11 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import type { Transcript } from "@/types/transcript";
-import { makeStringToArray } from "@/lib/utils";
+import { copyTextToClipboard, makeStringToArray } from "@/lib/utils";
 import Heading from "@/components/heading";
 import type { Note } from "@/types/note";
 import { Link } from "react-router";
-import { ArrowLeft, Trash, Pencil, FileText } from "lucide-react";
+import { ArrowLeft, Trash, Pencil, FileText, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useAlertDeleteNote from "@/stores/alert-delete-note";
 import useDialogUpdateNote from "@/stores/dialog-update-note";
@@ -19,6 +19,8 @@ import DialogEditNote from "@/components/dialog-edit-note";
 import { toast } from "sonner";
 import Loading from "@/components/loading";
 import ApiErrorState from "@/components/api-error-state";
+import dayjs from "dayjs";
+import { Calendar, Clock } from "lucide-react";
 
 const NoteDetailPage = () => {
 	const { openAlertDeleteNote, closeAlertDeleteNote } = useAlertDeleteNote();
@@ -29,6 +31,7 @@ const NoteDetailPage = () => {
 
 	const [note, setNote] = useState<Note | null>(null);
 	const [transcripts, setTranscripts] = useState<Transcript[]>([]);
+	const [fullTranscriptText, setFullTranscriptText] = useState("");
 
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -41,6 +44,8 @@ const NoteDetailPage = () => {
 
 		setLoading(true);
 		setErrorMessage(null);
+		setFullTranscriptText("");
+		setTranscripts([]);
 		try {
 			const [noteData, transcriptData] = await Promise.all([
 				apiClient<Note>(`${API_URI.NOTES}/${id}`, "GET"),
@@ -52,13 +57,29 @@ const NoteDetailPage = () => {
 				title: noteData.title,
 				updated_at: noteData.updated_at,
 			});
-			setTranscripts(makeStringToArray(transcriptData.text, "."));
+			const normalizedTranscriptText = transcriptData.text.trim();
+			setFullTranscriptText(normalizedTranscriptText);
+			setTranscripts(makeStringToArray(normalizedTranscriptText, "."));
 		} catch (error) {
 			setErrorMessage(getApiErrorMessage(error));
 		} finally {
 			setLoading(false);
 		}
 	}, [id]);
+
+	const copyTranscript = useCallback(async () => {
+		if (fullTranscriptText === "") {
+			toast.error("No transcript to copy.");
+			return;
+		}
+
+		try {
+			await copyTextToClipboard(fullTranscriptText);
+			toast("Transcript copied.");
+		} catch {
+			toast.error("Failed to copy transcript.");
+		}
+	}, [fullTranscriptText]);
 
 	const deleteNote = useCallback(
 		async (id: number) => {
@@ -98,31 +119,61 @@ const NoteDetailPage = () => {
 					</ApiErrorState>
 				) : (
 					<>
-						<div className="flex items-center justify-between">
-							<Heading level={1}>{note?.title}</Heading>
-							<div className="flex items-center gap-4">
-								<Button
-									variant="destructive"
-									size="icon"
-									onClick={(e) => {
-										e.preventDefault();
-										e.stopPropagation();
-										openAlertDeleteNote(Number(id));
-									}}
-								>
-									<Trash className="w-5 h-5" />
-								</Button>
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={(e) => {
-										e.preventDefault();
-										e.stopPropagation();
-										openDialogUpdateNote(Number(id), note?.title || "Untitled");
-									}}
-								>
-									<Pencil className="w-5 h-5" />
-								</Button>
+						<div className="flex flex-col gap-4 md:flex-row md:justify-between">
+							<div className="flex flex-col w-full">
+								<div className="flex items-center gap-3 mb-1">
+									<div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+										<Calendar className="w-4 h-4" />
+										{dayjs(note?.updated_at).format("DD MMM YYYY")}
+									</div>
+									<div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+										<Clock className="w-4 h-4" />
+										{dayjs(note?.updated_at).format("HH:mm")}
+									</div>
+								</div>
+								<div className="w-full flex items-center justify-between">
+									<Heading level={1}>{note?.title}</Heading>
+
+									<div className="flex items-center gap-4 ">
+										<div className="flex items-center gap-3">
+											<Button
+												variant="destructive"
+												size="icon"
+												onClick={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+													openAlertDeleteNote(Number(id));
+												}}
+											>
+												<Trash className="w-5 h-5" />
+											</Button>
+											<Button
+												variant="ghost"
+												size="icon"
+												onClick={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+													openDialogUpdateNote(
+														Number(id),
+														note?.title || "Untitled",
+													);
+												}}
+											>
+												<Pencil className="w-5 h-5" />
+											</Button>
+										</div>
+										<Button
+											variant="outline"
+											onClick={() => {
+												void copyTranscript();
+											}}
+											disabled={fullTranscriptText === ""}
+										>
+											<Copy className="w-4 h-4" />
+											Copy transcript
+										</Button>
+									</div>
+								</div>
 							</div>
 						</div>
 
