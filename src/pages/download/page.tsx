@@ -82,9 +82,10 @@ const DownloadPage = () => {
 						</p>
 					</div>
 
-					<Card className="mx-auto w-full max-w-3xl overflow-hidden border-border/80 bg-card/80 backdrop-blur">
-						<CardContent className="grid gap-8 px-8 py-10 md:grid-cols-[1.2fr_0.8fr] md:px-10">
-							<div className="space-y-5">
+					<Card className="mx-auto w-full max-w-4xl overflow-hidden border-border/80 bg-card/80 backdrop-blur">
+						<CardContent className="grid gap-8 px-8 py-10 md:px-10">
+							<div className="grid gap-6 md:grid-cols-[1fr_0.95fr] md:items-start">
+								<div className="space-y-5">
 								<div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/12 text-primary">
 									<Download className="h-7 w-7" />
 								</div>
@@ -115,72 +116,88 @@ const DownloadPage = () => {
 									)}
 									Download latest DMG
 								</Button>
+								</div>
 
-								<div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-left">
-									<div className="mb-2 flex items-center gap-2 text-sm font-medium text-amber-200">
-										<TriangleAlert className="h-4 w-4" />
-										Unsigned app notice
-									</div>
-									<div className="space-y-3 text-sm leading-6 text-amber-50/80">
-										<p>
-											If macOS blocks Transcript Keeper on first launch, please
-											open it using one of the following methods.
-										</p>
-										<ol className="list-decimal space-y-2 pl-5">
-											<li>
-												Right-click{" "}
-												<span className="font-medium text-amber-50">
-													Transcript Keeper.app
-												</span>{" "}
-												in Applications, then choose{" "}
-												<span className="font-medium text-amber-50">Open</span>.
-											</li>
-											<li>
-												If that does not work, run the following command in
-												Terminal:
-											</li>
-										</ol>
-										<pre className="overflow-x-auto rounded-xl border border-amber-500/20 bg-black/20 p-3 text-xs leading-5 text-amber-50">
-											<code>
-												xattr -dr com.apple.quarantine
-												&quot;/Applications/Transcript Keeper.app&quot;
-											</code>
-										</pre>
-										<p>
-											After that, open{" "}
-											<span className="font-medium text-amber-50">
-												Transcript Keeper.app
-											</span>{" "}
-											again.
-										</p>
+								<div className="rounded-3xl border border-border bg-secondary/40 p-6">
+									<p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-primary">
+										Platform
+									</p>
+									<p className="mb-5 text-2xl font-semibold text-foreground">
+										macOS only
+									</p>
+									<div className="space-y-4 text-sm leading-7 text-muted-foreground">
+										<div className="rounded-2xl border border-border/80 bg-background/40 p-4">
+											<p className="font-medium text-foreground">
+												What to expect
+											</p>
+											<p className="mt-2">
+												The button downloads the latest DMG from GitHub Releases.
+											</p>
+											<p className="mt-2">
+												The desktop app is distributed unsigned, so macOS may ask
+												you to manually approve it on first launch.
+											</p>
+										</div>
+										<div className="rounded-2xl border border-border/80 bg-background/40 p-4">
+											<p className="font-medium text-foreground">
+												Need a fallback?
+											</p>
+											<p className="mt-2">
+												If the latest installer cannot be resolved automatically,
+												you can still open the{" "}
+												<a
+													href={DESKTOP_RELEASES_URL}
+													target="_blank"
+													rel="noreferrer"
+													className="text-primary underline underline-offset-4"
+												>
+													GitHub Releases page
+												</a>
+												.
+											</p>
+										</div>
 									</div>
 								</div>
 							</div>
 
-							<div className="rounded-3xl border border-border bg-secondary/40 p-6">
-								<p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-primary">
-									Platform
-								</p>
-								<p className="mb-5 text-2xl font-semibold text-foreground">
-									macOS only
-								</p>
-								<p className="text-sm leading-7 text-muted-foreground">
-									The desktop app is distributed unsigned, so macOS may require
-									a manual approval step on first launch.
-								</p>
-								<p className="mt-4 text-sm leading-7 text-muted-foreground">
-									If the latest installer cannot be resolved automatically, you
-									can still open the{" "}
-									<a
-										href={DESKTOP_RELEASES_URL}
-										target="_blank"
-										rel="noreferrer"
-										className="text-primary underline underline-offset-4"
-									>
-										GitHub Releases page
-									</a>
-									.
-								</p>
+							<div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-left">
+								<div className="mb-2 flex items-center gap-2 text-sm font-medium text-amber-200">
+									<TriangleAlert className="h-4 w-4" />
+									Unsigned app notice
+								</div>
+								<div className="space-y-3 text-sm leading-6 text-amber-50/80">
+									<p>
+										If macOS blocks Transcript Keeper on first launch, please
+										open it using one of the following methods.
+									</p>
+									<ol className="list-decimal space-y-2 pl-5">
+										<li>
+											Right-click{" "}
+											<span className="font-medium text-amber-50">
+												Transcript Keeper.app
+											</span>{" "}
+											in Applications, then choose{" "}
+											<span className="font-medium text-amber-50">Open</span>.
+										</li>
+										<li>
+											If that does not work, run the following command in
+											Terminal:
+										</li>
+									</ol>
+									<pre className="overflow-x-auto rounded-xl border border-amber-500/20 bg-black/20 p-3 text-xs leading-5 text-amber-50">
+										<code>
+											xattr -dr com.apple.quarantine
+											&quot;/Applications/Transcript Keeper.app&quot;
+										</code>
+									</pre>
+									<p>
+										After that, open{" "}
+										<span className="font-medium text-amber-50">
+											Transcript Keeper.app
+										</span>{" "}
+										again.
+									</p>
+								</div>
 							</div>
 						</CardContent>
 					</Card>
