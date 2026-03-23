@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DESKTOP_RELEASES_URL } from "@/config/constants";
 import { getLatestDmgDownloadUrl, openDownloadUrl } from "@/lib/utils";
-import { Apple, Download, LoaderCircle } from "lucide-react";
+import { Apple, Download, LoaderCircle, TriangleAlert } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -100,6 +100,18 @@ const DownloadPage = () => {
 									</p>
 								</div>
 
+								<div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-left">
+									<div className="mb-2 flex items-center gap-2 text-sm font-medium text-amber-200">
+										<TriangleAlert className="h-4 w-4" />
+										Unsigned app notice
+									</div>
+									<p className="text-sm leading-6 text-amber-50/80">
+										This app is currently distributed unsigned. On first launch,
+										macOS may warn you and require manual approval before the app
+										can open.
+									</p>
+								</div>
+
 								<Button
 									size="lg"
 									className="h-12 px-8 text-base"
@@ -125,6 +137,10 @@ const DownloadPage = () => {
 									macOS only
 								</p>
 								<p className="text-sm leading-7 text-muted-foreground">
+									The desktop app is distributed unsigned, so please expect a
+									manual approval step in macOS the first time you open it.
+								</p>
+								<p className="mt-4 text-sm leading-7 text-muted-foreground">
 									If the latest installer cannot be resolved automatically, you
 									can still open the{" "}
 									<a
