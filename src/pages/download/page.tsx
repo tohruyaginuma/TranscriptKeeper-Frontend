@@ -100,18 +100,6 @@ const DownloadPage = () => {
 									</p>
 								</div>
 
-								<div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-left">
-									<div className="mb-2 flex items-center gap-2 text-sm font-medium text-amber-200">
-										<TriangleAlert className="h-4 w-4" />
-										Unsigned app notice
-									</div>
-									<p className="text-sm leading-6 text-amber-50/80">
-										This app is currently distributed unsigned. On first launch,
-										macOS may warn you and require manual approval before the app
-										can open.
-									</p>
-								</div>
-
 								<Button
 									size="lg"
 									className="h-12 px-8 text-base"
@@ -127,6 +115,46 @@ const DownloadPage = () => {
 									)}
 									Download latest DMG
 								</Button>
+
+								<div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-left">
+									<div className="mb-2 flex items-center gap-2 text-sm font-medium text-amber-200">
+										<TriangleAlert className="h-4 w-4" />
+										Unsigned app notice
+									</div>
+									<div className="space-y-3 text-sm leading-6 text-amber-50/80">
+										<p>
+											If macOS blocks Transcript Keeper on first launch, please
+											open it using one of the following methods.
+										</p>
+										<ol className="list-decimal space-y-2 pl-5">
+											<li>
+												Right-click{" "}
+												<span className="font-medium text-amber-50">
+													Transcript Keeper.app
+												</span>{" "}
+												in Applications, then choose{" "}
+												<span className="font-medium text-amber-50">Open</span>.
+											</li>
+											<li>
+												If that does not work, run the following command in
+												Terminal:
+											</li>
+										</ol>
+										<pre className="overflow-x-auto rounded-xl border border-amber-500/20 bg-black/20 p-3 text-xs leading-5 text-amber-50">
+											<code>
+												xattr -dr com.apple.quarantine
+												&quot;/Applications/Transcript Keeper.app&quot;
+											</code>
+										</pre>
+										<p>
+											After that, open{" "}
+											<span className="font-medium text-amber-50">
+												Transcript Keeper.app
+											</span>{" "}
+											again.
+										</p>
+									</div>
+								</div>
 							</div>
 
 							<div className="rounded-3xl border border-border bg-secondary/40 p-6">
@@ -137,8 +165,8 @@ const DownloadPage = () => {
 									macOS only
 								</p>
 								<p className="text-sm leading-7 text-muted-foreground">
-									The desktop app is distributed unsigned, so please expect a
-									manual approval step in macOS the first time you open it.
+									The desktop app is distributed unsigned, so macOS may require
+									a manual approval step on first launch.
 								</p>
 								<p className="mt-4 text-sm leading-7 text-muted-foreground">
 									If the latest installer cannot be resolved automatically, you
