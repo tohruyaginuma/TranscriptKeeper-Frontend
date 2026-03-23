@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DESKTOP_RELEASES_URL } from "@/config/constants";
 import { getLatestDmgDownloadUrl, openDownloadUrl } from "@/lib/utils";
-import { Apple, Download, LoaderCircle, TriangleAlert } from "lucide-react";
+import { Download, LoaderCircle, TriangleAlert } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -59,29 +59,11 @@ const DownloadPage = () => {
 
 	return (
 		<BaseLayout>
-			<section className="relative overflow-hidden px-6 py-24 md:py-32">
+			<section className="relative overflow-hidden px-6 py-20 md:py-24">
 				<div className="absolute inset-0 bg-gradient-to-b from-primary/8 via-transparent to-transparent" />
 				<div className="absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/12 blur-3xl" />
 
 				<div className="relative mx-auto flex max-w-5xl flex-col gap-10">
-					<div className="mx-auto max-w-3xl text-center">
-						<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-2 text-sm text-muted-foreground">
-							<Apple className="h-4 w-4 text-primary" />
-							Desktop app for macOS
-						</div>
-
-						<h1 className="mb-6 text-4xl font-bold tracking-tight text-balance text-foreground md:text-6xl">
-							Download Transcript Keeper for Mac
-						</h1>
-
-						<p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-							Install the desktop app to record meetings privately and sync
-							transcripts back to your account. The button below resolves the
-							latest GitHub Release and downloads the current `.dmg` installer
-							directly.
-						</p>
-					</div>
-
 					<Card className="mx-auto w-full max-w-4xl overflow-hidden border-border/80 bg-card/80 backdrop-blur">
 						<CardContent className="grid gap-8 px-8 py-10 md:px-10">
 							<div className="grid gap-6 md:grid-cols-[1fr_0.95fr] md:items-start">
