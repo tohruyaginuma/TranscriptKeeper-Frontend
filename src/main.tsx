@@ -7,6 +7,7 @@ import NotesPage from "@/pages/notes/page";
 import NoteDetailPage from "@/pages/notes/[id]/page";
 import SignInPage from "@/pages/signin/page";
 import SignOutPage from "@/pages/signout/page";
+import DownloadPage from "@/pages/download/page";
 import AuthProvider from "@/components/auth-provider";
 import AuthGuard from "@/components/auth-guard";
 import { Toaster } from "@/components/ui/sonner";
@@ -34,6 +35,7 @@ createRoot(document.getElementById("root")!).render(
 						}
 					/>
 					<Route path="/" element={<LandingPage />} />
+					<Route path="/download" element={<DownloadPage />} />
 					<Route path="/signout" element={<SignOutPage />} />
 					<Route path="/signin" element={<SignInPage />} />
 				</Routes>

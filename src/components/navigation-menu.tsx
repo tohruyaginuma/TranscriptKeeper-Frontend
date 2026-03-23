@@ -19,6 +19,16 @@ export function NavigationMenu(props: NavigationMenuProps) {
 	return (
 		<NavigationMenuPrimitive>
 			<NavigationMenuList>
+				<NavigationMenuItem>
+					<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+						<Link
+							to="/download"
+							className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+						>
+							Download
+						</Link>
+					</NavigationMenuLink>
+				</NavigationMenuItem>
 				{user && (
 					<NavigationMenuItem>
 						<NavigationMenuLink

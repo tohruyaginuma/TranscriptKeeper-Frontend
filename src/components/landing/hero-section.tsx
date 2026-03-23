@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Download, ArrowRight } from "lucide-react";
-import { openDownloadUrl } from "@/lib/utils";
 import { useNavigate } from "react-router";
 
 export function HeroSection() {
@@ -41,7 +40,7 @@ export function HeroSection() {
 						variant="outline"
 						size="lg"
 						className="gap-2 px-8 h-12 text-base"
-						onClick={openDownloadUrl}
+						onClick={() => navigate("/download")}
 					>
 						<Download className="w-5 h-5" />
 						Download Desktop App
@@ -49,7 +48,7 @@ export function HeroSection() {
 				</div>
 
 				<p className="mt-6 text-sm text-muted-foreground">
-					Free to start • Windows & macOS • No credit card required
+					Free to start • macOS only • No credit card required
 				</p>
 			</div>
 		</section>

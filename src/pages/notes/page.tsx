@@ -13,7 +13,6 @@ import { useState, useCallback, useEffect } from "react";
 import { apiClient, getApiErrorMessage } from "@/lib/api";
 import { API_URI } from "@/config/constants";
 import type { Note } from "@/types/note";
-import { openDownloadUrl } from "@/lib/utils";
 import Loading from "@/components/loading";
 import dayjs from "dayjs";
 import useAlertDeleteNote from "@/stores/alert-delete-note";
@@ -94,12 +93,13 @@ const NotesPage = () => {
 								className="mb-6"
 							>
 								<Button
+									asChild
 									variant="outline"
-									type="button"
-									onClick={openDownloadUrl}
 								>
-									<Download className="w-5 h-5" />
-									Download Desktop App
+									<Link to="/download">
+										<Download className="w-5 h-5" />
+										Download Desktop App
+									</Link>
 								</Button>
 							</ApiErrorState>
 						)}
@@ -116,13 +116,15 @@ const NotesPage = () => {
 									automatically.
 								</p>
 								<Button
+									asChild
 									variant="outline"
 									size="lg"
 									className="gap-2 px-8 h-12 text-base"
-									onClick={openDownloadUrl}
 								>
-									<Download className="w-5 h-5" />
-									Download Desktop App
+									<Link to="/download">
+										<Download className="w-5 h-5" />
+										Download Desktop App
+									</Link>
 								</Button>
 							</div>
 						) : null}

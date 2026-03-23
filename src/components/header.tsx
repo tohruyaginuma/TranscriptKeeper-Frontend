@@ -2,15 +2,33 @@ import { NavigationMenu } from "@/components/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router";
 import Logo from "@/components/logo";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext, type AuthContextType } from "@/components/auth-context";
 import { auth } from "@/lib/firebase";
-import { signOut as signOutAuth } from "firebase/auth";
+import { signOut as signOutAuth, type User } from "firebase/auth";
+import { LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Flex from "@/components/flex";
 
 const Header = () => {
 	const { user } = useContext<AuthContextType>(AuthContext);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const [isAvatarImageError, setIsAvatarImageError] = useState(false);
+
+	const avatarImageUrl = useMemo(() => {
+		if (!user) {
+			return null;
+		}
+
+		const userWithPhotoUrl = user as User & { photoUrl?: string | null };
+		return user.photoURL ?? userWithPhotoUrl.photoUrl ?? null;
+	}, [user]);
+
+	useEffect(() => {
+		setIsAvatarImageError(false);
+	}, []);
+
 	const signOut = useCallback(async () => {
 		try {
 			await signOutAuth(auth);
@@ -41,14 +59,42 @@ const Header = () => {
 				</nav>
 
 				<div className="flex items-center gap-3">
-					{/* <Button variant="ghost" size="sm">
-						Sign In
-					</Button>
-					<Button size="sm">Sign Up</Button> */}
 					{user !== null ? (
-						<Button variant="default" onClick={signOut}>
-							Sign Out
-						</Button>
+						<Flex hasPadding direction="row" gapX="sm">
+							<Avatar size="lg">
+								{avatarImageUrl && !isAvatarImageError ? (
+									<img
+										src={avatarImageUrl}
+										alt={user.displayName ?? user.email ?? "User avatar"}
+										className="size-full object-cover"
+										referrerPolicy="no-referrer"
+										onError={() => {
+											setIsAvatarImageError(true);
+										}}
+									/>
+								) : (
+									<AvatarFallback>
+										{user?.displayName?.charAt(0)}
+									</AvatarFallback>
+								)}
+							</Avatar>
+							<Flex>
+								<p className="text-sm font-medium text-foreground">
+									{user?.displayName}
+								</p>
+								<p className="text-sm text-muted-foreground">{user?.email}</p>
+							</Flex>
+							<Button
+								variant="outline"
+								size="icon"
+								aria-label="Sign out"
+								onClick={() => {
+									signOut();
+								}}
+							>
+								<LogOut />
+							</Button>
+						</Flex>
 					) : (
 						!isHideSignIn && (
 							<Button variant="ghost" size="sm" onClick={signIn}>

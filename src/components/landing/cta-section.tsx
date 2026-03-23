@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Download, ArrowRight } from "lucide-react";
-import { openDownloadUrl } from "@/lib/utils";
 import { useNavigate } from "react-router";
 
 export function CTASection() {
@@ -37,7 +36,7 @@ export function CTASection() {
 								variant="outline"
 								size="lg"
 								className="gap-2 px-8 h-12 text-base"
-								onClick={openDownloadUrl}
+								onClick={() => navigate("/download")}
 							>
 								<Download className="w-5 h-5" />
 								Download Desktop App

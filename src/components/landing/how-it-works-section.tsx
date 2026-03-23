@@ -3,7 +3,7 @@ const steps = [
 		step: "01",
 		title: "Download & Install",
 		description:
-			"Get the desktop app for Windows or macOS. Simple installation with no complex setup required.",
+			"Get the macOS desktop app from the download page. Simple installation with no complex setup required.",
 	},
 	{
 		step: "02",
